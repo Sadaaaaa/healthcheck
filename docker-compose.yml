@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   healthcheck-bot:
     build: .
@@ -15,7 +13,6 @@ services:
       - TELEGRAM_ID=66213196
     volumes:
       - ./logs:/var/logs
-#    command: java -XX:+UseG1GC -jar /app/target/*.jar
     networks:
       - bot-network
 

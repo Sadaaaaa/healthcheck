@@ -12,4 +12,4 @@ WORKDIR /app
 COPY . .
 RUN mkdir -p /var/logs
 RUN mvn clean package -DskipTests
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "target/healthcheck.jar"]
