@@ -13,6 +13,7 @@ services:
       - TELEGRAM_ID=66213196
     volumes:
       - ./logs:/var/logs
+    command: java -XX:+UseG1GC -jar /app/target/healthcheck.jar
     networks:
       - bot-network
 

@@ -1,15 +1,20 @@
-#FROM openjdk:21-jdk
-#
+#FROM maven:latest
 #WORKDIR /app
-#COPY target/*.jar app.jar
-#COPY src/main/resources/application.properties application.properties
+#COPY . .
+#RUN mkdir -p /var/logs
+#RUN mvn clean package -DskipTests
+#CMD ["java", "-jar", "/app/target/healthcheck.jar"]
+
 #
-#EXPOSE 8080
+# Build stage
 #
-#ENTRYPOINT ["java", "-jar", "app.jar"]
-FROM maven:latest
+FROM maven:latest AS build
 WORKDIR /app
 COPY . .
-RUN mkdir -p /var/logs
-RUN mvn clean package -DskipTests
-CMD ["java", "-jar", "target/healthcheck.jar"]
+RUN mvn -B -DskipTests clean package
+
+FROM openjdk:21-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar /app/healthcheck.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/healthcheck.jar"]

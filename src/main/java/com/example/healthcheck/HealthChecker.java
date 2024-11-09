@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Component
-public class HealthCheckController extends TelegramLongPollingBot {
+public class HealthChecker extends TelegramLongPollingBot {
 
     @Value("${bot.username}")
     private String botUsername;
