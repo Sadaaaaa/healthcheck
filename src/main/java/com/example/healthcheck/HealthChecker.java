@@ -45,9 +45,9 @@ public class HealthChecker extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        log.info("Получен апдейт: {}", update);
         if (update.hasMessage() && update.getMessage().hasText() &&
                 update.getMessage().getText().equals("/healthcheck")) {
+            log.info("{} pressed /healthcheck button", update.getMessage().getFrom().getUserName());
             performHealthCheck(update.getMessage().getChatId().toString(), true);
         }
     }
