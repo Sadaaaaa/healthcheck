@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  healthcheck-bot:
+    build: .
+    container_name: healthcheck
+    restart: always
+    environment:
+      - BOT_USERNAME=plankit_healthcheck_bot
+      - BOT_TOKEN=7281514047:AAFENTb5wyZ1s58gcN2QRFwL2O9nHJ6UGJM
+      - FRONTEND_URL=https://planex.r-ex.ru:444/
+      - BACKEND_URL=https://planex.r-ex.ru:444/auth/roles
+      - TELEGRAM_ID=66213196
+    volumes:
+      - ./logs:/var/logs
+    networks:
+      - bot-network
+
+networks:
+  bot-network:
+    driver: bridge
