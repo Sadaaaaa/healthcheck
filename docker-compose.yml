@@ -6,11 +6,11 @@ services:
     ports:
       - "8090:8080"
     environment:
-      - BOT_USERNAME=plankit_healthcheck_bot
-      - BOT_TOKEN=7281514047:AAFENTb5wyZ1s58gcN2QRFwL2O9nHJ6UGJM
-      - FRONTEND_URL=https://planex.r-ex.ru:444/
-      - BACKEND_URL=https://planex.r-ex.ru:444/auth/roles
-      - TELEGRAM_ID=66213196
+      - BOT_USERNAME=
+      - BOT_TOKEN=
+      - FRONTEND_URL=
+      - BACKEND_URL=
+      - TELEGRAM_ID=
     volumes:
       - ./logs:/var/logs
     command: java -XX:+UseG1GC -jar /app/target/healthcheck.jar
