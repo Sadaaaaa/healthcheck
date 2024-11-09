@@ -1,5 +1,6 @@
 package com.example.healthcheck;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Component
+@Slf4j
 public class HealthChecker extends TelegramLongPollingBot {
 
     @Value("${bot.username}")
@@ -43,22 +45,23 @@ public class HealthChecker extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        log.info("Получен апдейт: {}", update);
         if (update.hasMessage() && update.getMessage().hasText() &&
                 update.getMessage().getText().equals("/healthcheck")) {
-            performHealthCheck(update.getMessage().getChatId().toString());
+            performHealthCheck(update.getMessage().getChatId().toString(), true);
         }
     }
 
     @Scheduled(fixedRate = 30000)
     public void scheduledHealthCheck() {
-        performHealthCheck(telegramId);
+        performHealthCheck(telegramId, false);
     }
 
-    private void performHealthCheck(String chatId) {
+    private void performHealthCheck(String chatId, boolean isButton) {
         boolean isFrontendHealthy = checkUrl(frontendUrl);
         boolean isBackendHealthy = checkUrl(backendUrl);
 
-        updateStatus(chatId, isFrontendHealthy && isBackendHealthy);
+        updateStatus(chatId, isFrontendHealthy && isBackendHealthy, isButton);
     }
 
     private boolean checkUrl(String urlString) {
@@ -74,7 +77,16 @@ public class HealthChecker extends TelegramLongPollingBot {
         }
     }
 
-    private void updateStatus(String chatId, boolean isHealthy) {
+    private void updateStatus(String chatId, boolean isHealthy, boolean isButton) {
+        if (isButton && isHealthy) {
+            sendMessage(chatId, "Сервер работает! 🎉");
+            isServerDown = false;
+            return;
+        } else if (isButton) {
+            sendMessage(chatId, "Сервер недоступен! ❌");
+            isServerDown = true;
+        }
+
         if (isHealthy && isServerDown) {
             sendMessage(chatId, "Сервер снова работает! 🎉");
             isServerDown = false;
