@@ -11,6 +11,7 @@ services:
       - FRONTEND_URL=
       - BACKEND_URL=
       - TELEGRAM_ID=
+      - HEALTHCHECK_RATE=
     volumes:
       - ./logs:/var/logs
     command: java -XX:+UseG1GC -jar /app/target/healthcheck.jar

@@ -52,7 +52,7 @@ public class HealthChecker extends TelegramLongPollingBot {
         }
     }
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRateString = "${healthcheck.rate:60000}")
     public void scheduledHealthCheck() {
         performHealthCheck(telegramId, false);
     }
